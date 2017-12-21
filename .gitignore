@@ -1,1 +1,5 @@
 .idea
+*.pyc
+/data/detection-dataset/test_data/
+/data/detection-dataset/training_data/
+/data/detection-dataset/validation_data/
