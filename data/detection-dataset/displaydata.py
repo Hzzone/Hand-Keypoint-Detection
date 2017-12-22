@@ -29,5 +29,7 @@ for i in range(len(l1)):
 	center = (bins[:-1] + bins[1:]) / 2
 	plt.bar(center, hist, align='center', width=width)
 	plt.title(data_sources[i / 2] + " " + ("width" if i % 2 == 0 else "height"))
+	plt.xlabel("pixel")
+	plt.ylabel("count")
 	plt.tight_layout()
 plt.show()

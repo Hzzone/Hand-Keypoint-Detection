@@ -3,3 +3,6 @@
 /data/detection-dataset/test_data/
 /data/detection-dataset/training_data/
 /data/detection-dataset/validation_data/
+/data/Proposal-Net/test_data/
+/data/Proposal-Net/training_data/
+/data/Proposal-Net/validation_data/

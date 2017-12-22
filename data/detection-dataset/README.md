@@ -10,7 +10,7 @@ and same in train_data and validation_data.
 #### image example
 <div align="center">
     <img src="../../pic/example_image.jpg">
-</div>
+</div>  
 #### Data's (width, height)
 <div align="center">
     <img src="../../pic/width_and_height.png">
