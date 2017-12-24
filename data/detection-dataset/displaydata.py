@@ -1,4 +1,4 @@
-from variable import *
+from utils.variable import *
 
 l1 = []
 for each_source in data_sources:

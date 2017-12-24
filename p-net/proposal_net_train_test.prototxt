@@ -1,14 +1,18 @@
 name: "proposal_net"
 layer {
-  name: "PythonLayer"
-  type: "Python"
+  name: "data"
+  type: "HDF5Data"
   top: "data"
   top: "label"
   top: "roi"
   top: "pts"
-  python_param {
-    module: "pythonLayer"
-    layer:  "Data_Layer_train"
+  include {
+    phase: TRAIN
+  }
+  hdf5_data_param {
+    source: "./train.txt"
+    batch_size: 256
+    shuffle: true
   }
 }
 layer {

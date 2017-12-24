@@ -1,20 +1,28 @@
-from variable import *
+import os.path as osp
+import os
+import shutil
+import numpy as np
+import cv2
+import numpy.random as npr
+import sys
+sys.path.insert(0, osp.join("..", "utils"))
+from utils import IoU
+from tqdm import tqdm
 
-p_net = "Proposal-Net"
 
+p_net = "p-net"
 pos = "positive"
 part = "part"
 neg = 'negative'
 
-def generate_data(data_source):
-	p_net_path = osp.join("..", p_net)
-	data_save_path = osp.join(p_net_path, data_source)
+def generate_data(data_source, data_save_path, net_size=12):
 	if osp.exists(data_save_path):
 		shutil.rmtree(data_save_path)
+	print data_save_path
 	os.mkdir(data_save_path)
-	f1 = open(os.path.join(data_save_path, 'pos_%s.txt' % data_source), 'w')
-	f2 = open(os.path.join(data_save_path, 'neg_%s.txt' % data_source), 'w')
-	f3 = open(os.path.join(data_save_path, 'part_%s.txt' % data_source), 'w')
+	f1 = open(os.path.join(data_save_path, 'pos.txt'), 'w')
+	f2 = open(os.path.join(data_save_path, 'neg.txt'), 'w')
+	f3 = open(os.path.join(data_save_path, 'part.txt'), 'w')
 	pos_save_dir = osp.join(data_save_path, pos)
 	part_save_dir = osp.join(data_save_path, part)
 	neg_save_dir = osp.join(data_save_path, neg)
@@ -34,17 +42,13 @@ def generate_data(data_source):
 	p_idx = 0  # positive
 	n_idx = 0  # negative
 	d_idx = 0  # dont care
-	idx = 0
 	box_idx = 0
-	for annotation in annotations:
+	for annotation in tqdm(annotations):
 		annotation = annotation.strip().split(' ')
 		file_name = annotation[0]
 		bbox = map(float, annotation[1:])
 		boxes = np.array(bbox, dtype=np.float32).reshape(-1, 4)
 		img = cv2.imread(osp.join(osp.join(data_source, "images"), file_name + '.jpg'))
-		idx += 1
-		if idx % 100 == 0:
-			print data_source, idx, "images done"
 
 		height, width, channel = img.shape
 
@@ -61,12 +65,12 @@ def generate_data(data_source):
 			Iou = IoU(crop_box, boxes)
 
 			cropped_im = img[ny: ny + size, nx: nx + size, :]
-			resized_im = cv2.resize(cropped_im, (12, 12), interpolation=cv2.INTER_LINEAR)
+			resized_im = cv2.resize(cropped_im, (net_size, net_size), interpolation=cv2.INTER_LINEAR)
 
 			if np.max(Iou) < 0.3:
 				# Iou with all gts must below 0.3
 				save_file = osp.join(neg_save_dir, "%s.jpg" % n_idx)
-				f2.write("%s" % n_idx + ' 0\n')
+				f2.write("%s 0 %s\n" % (save_file, ('-1 '*46).rstrip()))
 				cv2.imwrite(save_file, resized_im)
 				n_idx += 1
 				neg_num += 1
@@ -112,23 +116,22 @@ def generate_data(data_source):
 				offset_y2 = (y2 - ny2) / float(size)
 
 				cropped_im = img[ny1: ny2, nx1: nx2, :]
-				resized_im = cv2.resize(cropped_im, (12, 12), interpolation=cv2.INTER_LINEAR)
+				resized_im = cv2.resize(cropped_im, (net_size, net_size), interpolation=cv2.INTER_LINEAR)
 
 				box_ = box.reshape(1, -1)
 				if IoU(crop_box, box_) >= 0.65 and pos_num < 10:
 					save_file = osp.join(pos_save_dir, "%s.jpg" % p_idx)
-					f1.write("%s" % p_idx + ' 1 %.2f %.2f %.2f %.2f\n' % (offset_x1, offset_y1, offset_x2, offset_y2))
+					f1.write("%s 1 %.2f %.2f %.2f %.2f %s\n" % (save_file, offset_x1, offset_y1, offset_x2, offset_y2, ('-1 '*42).rstrip()))
 					cv2.imwrite(save_file, resized_im)
 					p_idx += 1
 					pos_num += 1
 				elif IoU(crop_box, box_) >= 0.4 and part_num < 10:
 					save_file = os.path.join(part_save_dir, "%s.jpg" % d_idx)
-					f3.write("%s" % d_idx + ' -1 %.2f %.2f %.2f %.2f\n' % (offset_x1, offset_y1, offset_x2, offset_y2))
+					f3.write("%s -1 %.2f %.2f %.2f %.2f %s\n" % (save_file, offset_x1, offset_y1, offset_x2, offset_y2, ('-1 '*42).rstrip()))
 					cv2.imwrite(save_file, resized_im)
 					d_idx += 1
 					part_num += 1
 			box_idx += 1
-			print "%s %s %s images done, pos: %s part: %s neg: %s" % (data_source, file_name, idx, p_idx, d_idx, n_idx)
 
 
 	f1.close()
@@ -136,7 +139,6 @@ def generate_data(data_source):
 	f3.close()
 
 
-for data_source in data_sources:
-	generate_data(data_source)
-
+if __name__ == "__main__":
+	generate_data("./detection-dataset/training_data", "/Users/HZzone/Desktop/Hand-Keypoint-Detection/data/p-net/training_data")
 

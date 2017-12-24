@@ -1,4 +1,4 @@
-from variable import *
+from utils.variable import *
 
 for each_source in data_sources:
 	annotations_source = osp.join(each_source, annotations)
