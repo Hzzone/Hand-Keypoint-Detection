@@ -11,7 +11,7 @@ layer {
   }
   hdf5_data_param {
     source: "./train.txt"
-    batch_size: 256
+    batch_size: 156
     shuffle: true
   }
 }
@@ -151,7 +151,7 @@ layer {
   top: "label-valid"
   python_param {
     module: "pythonLayer"
-    layer:  "cls_Layer_fc"
+    layer:  "filter_Layer"
   }
 }
 layer {
@@ -202,16 +202,26 @@ layer {
   }
 }
 layer {
-  name: "roi_loss"
+  name: "roi_bridge"
   type: "Python"
   bottom: "conv4-2"
   bottom: "roi"
-  top: "roi_loss"
-  loss_weight: 0.5
+  top: "conv4-2-valid"
+  top: "roi-valid"
   python_param {
     module: "pythonLayer"
-    layer:  "regression_Layer"
+    layer:  "filter_Layer"
   }
+}
+layer {
+  name: "roi_loss"
+  type: "EuclideanLoss"
+  bottom: "conv4-2-valid"
+  bottom: "roi-valid"
+  top: "roi_loss"
+  propagate_down: 1
+  propagate_down: 0
+  loss_weight: 0.5
 }
 layer {
   name: "conv4-3"
@@ -227,7 +237,7 @@ layer {
     decay_mult: 0
   }
   convolution_param {
-    num_output: 10
+    num_output: 42
     kernel_size: 1
     stride: 1
      weight_filler {
@@ -240,14 +250,24 @@ layer {
   }
 }
 layer {
-  name: "pts_loss"
+  name: "pts_bridge"
   type: "Python"
   bottom: "conv4-3"
   bottom: "pts"
-  top: "pts_loss"
-  loss_weight: 0.5
+  top: "conv4-3-valid"
+  top: "pts-valid"
   python_param {
     module: "pythonLayer"
-    layer:  "regression_Layer"
+    layer:  "filter_Layer"
   }
+}
+layer {
+  name: "pts_loss"
+  type: "EuclideanLoss"
+  bottom: "conv4-3-valid"
+  bottom: "pts-valid"
+  top: "pts_loss"
+  propagate_down: 1
+  propagate_down: 0
+  loss_weight: 0.5
 }

@@ -18,7 +18,7 @@ def read_txt(data_source, pos_count, part_count, neg_count):
 	return lines
 
 
-def generate_hdf5(file_list, save_dir, txt_save_path, segment_size=1000):
+def generate_hdf5(file_list, save_dir, txt_save_path, segment_size=10000):
 	'''
 	1. 由于hdf5文件大小的限制，每1000张图片生成一个h5文件
 	2. 传入的file_list 需要random.choice生成自己需要的大小，不需要全部传入
@@ -31,35 +31,24 @@ def generate_hdf5(file_list, save_dir, txt_save_path, segment_size=1000):
 	file_list = [image_file.split() for image_file in file_list]
 	width, height, channels = cv2.imread(file_list[0][0]).shape
 
-	tmp_value = len(file_list)/segment_size*segment_size ## 最后一个1000的位置
 	for index in tqdm(range(0, len(file_list), segment_size)):
-		if index > tmp_value:
-			data = np.zeros(((len(file_list)-index), channels, width, height), dtype=np.float32)
-			labels = np.ones((len(file_list)-index), dtype=np.int)
-			roi = np.ones((len(file_list)-index, 1, 4), dtype=np.float32)
-			pts = np.ones((len(file_list)-index, 1, 42), dtype=np.float32)
-			for i in range(index, len(file_list)):
-				im = cv2.imread(file_list[index][0])
-				im = (im - 127.5) / 127.5
-				data[i % segment_size, :, :] = np.transpose(im, (2, 0, 1))
-				labels[i % segment_size] = int(file_list[index][1])
-				roi[i % segment_size, :, :] = map(float, file_list[index][2: 5])
-				pts[i % segment_size, :, :] = map(float, file_list[index][6: 47])
-		else:
-			data = np.zeros((segment_size, channels, width, height), dtype=np.float32)
-			labels = np.ones((len(file_list)-index), dtype=np.int)
-			roi = np.ones((segment_size, 1, 4), dtype=np.float32)
-			pts = np.ones((segment_size, 1, 42), dtype=np.float32)
-			for i in range(index, index+segment_size):
-				im = cv2.imread(file_list[index][0])
-				im = (im - 127.5) / 127.5
-				data[i % segment_size, :, :] = np.transpose(im, (2, 0, 1))
-				labels[i % segment_size] = int(file_list[index][1])
-				roi[i % segment_size, :, :] = np.reshape(map(float, file_list[index][2: 6]), (-1, 4))
-				pts[i % segment_size, :, :] = np.reshape(map(float, file_list[index][6: 49]), (-1, 42))
+	# for index in range(0, len(file_list), segment_size):
+		data = np.zeros((segment_size, channels, width, height), dtype=np.float32)
+		labels = np.ones((segment_size, 1, 1, 1), dtype=np.int)
+		roi = np.ones((segment_size, 4, 1, 1), dtype=np.float32)
+		pts = np.ones((segment_size, 42, 1, 1), dtype=np.float32)
+		for i in range(index, index+segment_size):
+			im = cv2.imread(file_list[i][0])
+			im = (im - 127.5) / 127.5
+			data[i % segment_size, :, :] = np.transpose(im, (2, 0, 1))
+			labels[i % segment_size] = int(file_list[i][1])
+			roi[i % segment_size][...] = np.reshape(map(float, file_list[i][2: 6]), (4, 1, 1))
+			pts[i % segment_size][...] = np.reshape(map(float, file_list[i][6: 48]), (42, 1, 1))
 		with hy.File(osp.join(save_dir, str(index/segment_size)+'.h5'), 'w') as h5_file:
 			h5_file['data'] = data
 			h5_file['label'] = labels
+			h5_file['roi'] = roi
+			h5_file['pts'] = pts
 
 	temp_str = ""
 	for h5_file in os.listdir(save_dir):
