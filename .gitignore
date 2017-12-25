@@ -8,3 +8,5 @@
 /data/p-net/validation_data/
 /data/p-net/train_h5/
 /p-net/train.txt
+*.caffemodel
+*.solverstate
