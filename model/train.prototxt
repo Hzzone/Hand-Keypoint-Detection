@@ -1,4 +1,4 @@
-name: "VGG_VOC0712_SSD_300x300_train"
+name: "VGG_HAND_SSD_300x300_train"
 layer {
   name: "data"
   type: "AnnotatedData"
@@ -9,9 +9,9 @@ layer {
   }
   transform_param {
     mirror: true
-    mean_value: 104.0
-    mean_value: 117.0
-    mean_value: 123.0
+    mean_value: 127.0
+    mean_value: 127.0
+    mean_value: 127.0
     resize_param {
       prob: 1.0
       resize_mode: WARP
@@ -45,7 +45,7 @@ layer {
     }
   }
   data_param {
-    source: "examples/VOC0712/VOC0712_trainval_lmdb"
+    source: "../data/lmdb/trainval_lmdb"
     batch_size: 32
     backend: LMDB
   }
@@ -132,7 +132,7 @@ layer {
       max_sample: 1
       max_trials: 50
     }
-    label_map_file: "data/VOC0712/labelmap_voc.prototxt"
+    label_map_file: "../data/labelmap_voc.prototxt"
   }
 }
 layer {

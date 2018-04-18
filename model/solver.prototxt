@@ -10,8 +10,8 @@ gamma: 0.10000000149
 momentum: 0.899999976158
 weight_decay: 0.000500000023749
 snapshot: 80000
-snapshot_prefix: "./VGG_HAND_SSD_300x300"
-solver_mode: GPU
+snapshot_prefix: "./snapshot/VGG_HAND_SSD_300x300"
+solver_mode: CPU
 device_id: 0
 debug_info: false
 snapshot_after_train: true

@@ -1,4 +1,4 @@
-name: "VGG_VOC0712_SSD_300x300_test"
+name: "VGG_HAND_SSD_300x300_test"
 layer {
   name: "data"
   type: "AnnotatedData"
@@ -20,14 +20,14 @@ layer {
     }
   }
   data_param {
-    source: "examples/VOC0712/VOC0712_test_lmdb"
+    source: "../data/lmdb/test_lmdb"
     batch_size: 8
     backend: LMDB
   }
   annotated_data_param {
     batch_sampler {
     }
-    label_map_file: "data/VOC0712/labelmap_voc.prototxt"
+    label_map_file: "../data/labelmap_voc.prototxt"
   }
 }
 layer {

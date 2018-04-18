@@ -11,3 +11,4 @@
 /data/lmdb/
 /data/test.txt
 /data/trainval.txt
+/model/VGG_VOC0712_SSD_300x300_iter_120000.caffemodel
