@@ -1,3 +1,18 @@
+### [SSD-Hand-Detection](https://github.com/weiliu89/caffe/tree/ssd)
+#### Dataset
+* [egohands](http://vision.soic.indiana.edu/projects/egohands/)
+* [stanfordhands](http://www.robots.ox.ac.uk/~vgg/data/hands/)
+
+#### Preprocess
+* `min(hands width and height) > threshold`, for egohands, `threshold=40`; for stanfordhands, `threshold=20`.
+* clean dataset can be downloaded from [onedrive]().
+* run `create_txt.py` to generate `test.txt` and `trainval.txt`.
+* At last run `./create_data.sh` to generate lmdb file in data/lmdb folder.
+
+#### Train
+* pretrained model are provided by the author and trained on [PASCAL VOC 2012, 2017](http://host.robots.ox.ac.uk/pascal/VOC/). [Download Link]().
+
+
 ### Roadmap of hand keypoint detection
 * 第一步
 分为三个网络，大小分别是propoasl-net: 12，refine-net: 24，output-net: 48。propoasl-net和refine-net使用检测手的数据集，output-net使用手部关键点数据集。   

@@ -15,14 +15,14 @@ def trans(data_sources, set_name):
     JPEGImages_dir = os.path.join(curr_dir, set_name, 'JPEGImages')
     os.mkdir(Annotations_dir)
     os.mkdir(JPEGImages_dir)
-    cv2.namedWindow("", 0)
-    cv2.resizeWindow('', 300, 300)
+    # cv2.namedWindow("", 0)
+    # cv2.resizeWindow('', 300, 300)
     for each_source in data_sources:
         annotations_source = osp.join(each_source, 'annotations')
         img_source = osp.join(each_source, 'images')
         for mat_file in os.listdir(annotations_source):
             mat_file_path = osp.join(annotations_source, mat_file)
-            print(mat_file_path)
+            # print(mat_file_path)
             img_file_path = osp.join(img_source, mat_file.rstrip('.mat'))+'.jpg'
             img = cv2.imread(img_file_path)
             boxes_data = sio.loadmat(mat_file_path)["boxes"].flatten()
@@ -56,11 +56,25 @@ def trans(data_sources, set_name):
                 y2 = int(round(max(tmp[:, 0]), 0))
                 x1 = int(round(min(tmp[:, 1]), 0))
                 x2 = int(round(max(tmp[:, 1]), 0))
+                # cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), thickness=2)
+                x2 = im_width if x2 > im_width else x2
+                y2 = im_height if y2 > im_height else y2
+                x1 = 0 if x1 < 0 else x1
+                y1 = 0 if y1 < 0 else y1
+
                 width = x2-x1+1
                 height = y2-y1+1
-                cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), thickness=2)
+
                 if(min(width, height)<20):
                     continue
+
+                # if x2>im_width or x1<0 or y2>im_height or y1<0:
+                #     print(x1, x2, y1, y2, width, height, im_height, im_width)
+                    # cv2.imshow("", img)
+                    # cv2.waitKey(0)
+                if x2<=x1 or y2<=y1:
+                    print(x1, y1)
+
 
                 effective_hands = effective_hands + 1
                 node_object = SubElement(node_root, 'object')

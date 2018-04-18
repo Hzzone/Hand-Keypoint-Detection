@@ -162,7 +162,7 @@ if __name__ == "__main__":
 
   if not os.path.exists(example_dir):
     os.makedirs(example_dir)
-  link_dir = os.path.join(example_dir, os.path.basename(out_dir))
-  if os.path.exists(link_dir):
-    os.unlink(link_dir)
-  os.symlink(out_dir, link_dir)
+  # link_dir = os.path.join(example_dir, os.path.basename(out_dir))
+  # if os.path.exists(link_dir):
+  #   os.unlink(link_dir)
+  # os.symlink(out_dir, link_dir)

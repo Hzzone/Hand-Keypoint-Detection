@@ -1,5 +1,5 @@
-train_net: "models/VGGNet/VOC0712/SSD_300x300/train.prototxt"
-test_net: "models/VGGNet/VOC0712/SSD_300x300/test.prototxt"
+train_net: "train.prototxt"
+test_net: "test.prototxt"
 test_iter: 619
 test_interval: 10000
 base_lr: 0.0010000000475
@@ -10,7 +10,7 @@ gamma: 0.10000000149
 momentum: 0.899999976158
 weight_decay: 0.000500000023749
 snapshot: 80000
-snapshot_prefix: "models/VGGNet/VOC0712/SSD_300x300/VGG_VOC0712_SSD_300x300"
+snapshot_prefix: "./VGG_HAND_SSD_300x300"
 solver_mode: GPU
 device_id: 0
 debug_info: false

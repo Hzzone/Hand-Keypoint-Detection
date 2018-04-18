@@ -72,8 +72,19 @@ def trans(data, set_name):
         effective_hands = 0
         for index in range(boxes.shape[0]):
             minx, miny, w, h = boxes[index]
-            if min(w, h)<40:
+            maxx = minx+w-1
+            maxy = miny+h-1
+            maxx = im_width if maxx > im_width else maxx
+            maxy = im_height if maxy > im_height else maxy
+            minx = 0 if minx < 0 else minx
+            miny = 0 if miny < 0 else miny
+            w = maxx-minx+1
+            h = maxy-miny+1
+            if min(w, h) < 40:
                 continue
+            if maxx <= minx or maxy <= miny:
+                print(minx, miny)
+
             effective_hands = effective_hands + 1
             node_object = SubElement(node_root, 'object')
             node_name = SubElement(node_object, 'name')
@@ -86,15 +97,15 @@ def trans(data, set_name):
             node_ymin = SubElement(node_bndbox, 'ymin')
             node_ymin.text = str(miny)
             node_xmax = SubElement(node_bndbox, 'xmax')
-            node_xmax.text = str(minx+w-1)
+            node_xmax.text = str(maxx)
             node_ymax = SubElement(node_bndbox, 'ymax')
-            node_ymax.text = str(miny+h-1)
+            node_ymax.text = str(maxy)
 
         xml = tostring(node_root, pretty_print=True)
         # if effective_hands == 0:
         #     print(im_path)
         if effective_hands != 0:
-            print(im_path)
+            # print(im_path)
             with open(Annotations_dir + "/" + new_img_name+'.xml', 'w') as f:
                 f.write(xml)
             shutil.copy(im_path, JPEGImages_dir + '/' + new_img_name + '.jpg')
