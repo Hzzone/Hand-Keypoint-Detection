@@ -56,7 +56,7 @@ class SSD_NET(object):
         det_ymax = detections[0, 0, :, 6]
         # Get detections with confidence higher than 0.6.
         # print(det_conf)
-        top_indices = [i for i, conf in enumerate(det_conf) if conf >= 0.1]
+        top_indices = [i for i, conf in enumerate(det_conf) if conf >= 0.6]
 
         top_conf = det_conf[top_indices]
         top_label_indices = det_label[top_indices].tolist()

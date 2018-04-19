@@ -12,7 +12,9 @@ def eval_mAP(predict_file, ground_truth_file):
                     first_line = False
                     continue
                 if len(line.strip().split(',')) == 6:
-                    im_id,xmin,ymin,xmax,ymax,score = map(float, line.strip().split(','))
+                    line_data = line.strip().split(',')
+                    im_id = line_data[0]
+                    xmin,ymin,xmax,ymax,score = map(float, line_data[1:])
                 else:
                     im_id,xmin,ymin,xmax,ymax = map(float, line.strip().split(','))
                     score = 1.

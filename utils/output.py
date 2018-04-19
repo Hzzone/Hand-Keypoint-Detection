@@ -1,4 +1,3 @@
-import lmdb
 import os
 from ssd_net import *
 import sys
@@ -43,7 +42,7 @@ def output_gt_label(datatset_name):
 def output(model_def, model_weights, datatset_name):
 
     img_dir = os.path.join(data_dir, datatset_name, 'test', 'JPEGImages')
-    ssd_net = SSD_NET(model_weights, model_def, GPU_MODE=False)
+    ssd_net = SSD_NET(model_weights, model_def, GPU_MODE=True)
 
     output_boxes = [['id', 'x1', 'y1', 'x2', 'y2', 'score'], ]
     for img_name in os.listdir(img_dir):
@@ -53,6 +52,7 @@ def output(model_def, model_weights, datatset_name):
         image = caffe.io.load_image(img_path)
 
         top_label_indices, top_conf, top_xmin, top_ymin, top_xmax, top_ymax = ssd_net.detect(image)
+        print(img_path)
 
         for i in xrange(top_conf.shape[0]):
             xmin = int(round(top_xmin[i] * image.shape[1]))
@@ -67,7 +67,8 @@ def output(model_def, model_weights, datatset_name):
             assert label_indice == 1.0
 
 
-    iter_times = re.findall('VGG_HAND_SSD_300x300_(.*?).caffemodel', model_weights.split(os.sep)[-1])
+    iter_times = re.findall('VGG_HAND_SSD_300x300_(.*?).caffemodel', model_weights.split(os.sep)[-1])[0]
+    print(iter_times)
     output_dir = '../output/{}'.format(iter_times)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -79,8 +80,8 @@ def output(model_def, model_weights, datatset_name):
 
 
 
-model_def = '/Users/hzzone/Desktop/Hand-Keypoint-Detection/model/deploy.prototxt'
-model_weights = '/Users/hzzone/Desktop/Hand-Keypoint-Detection/model/snapshot/VGG_HAND_SSD_300x300_iter_1000.caffemodel'
+model_def = '../model/deploy.prototxt'
+model_weights = '../model/snapshot/VGG_HAND_SSD_300x300_iter_1000.caffemodel'
 output(model_def, model_weights, 'egohands')
 # output_gt_label('egohands')
 # output_gt_label('stanfordhands')
