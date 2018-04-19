@@ -5,6 +5,7 @@ sys.path.insert(0, '../caffe/python')
 import xml.dom.minidom
 import csv
 import re
+import time
 
 data_dir = '../data'
 
@@ -45,13 +46,22 @@ def output(model_def, model_weights, datatset_name):
     ssd_net = SSD_NET(model_weights, model_def, GPU_MODE=True)
 
     output_boxes = [['id', 'x1', 'y1', 'x2', 'y2', 'score'], ]
+
+
+    total_time = 0.0
+
     for img_name in os.listdir(img_dir):
         img_path = os.path.join(img_dir, img_name)
         img_name = img_name.strip('.jpg')
 
         image = caffe.io.load_image(img_path)
 
+        start = time.time()
+
         top_label_indices, top_conf, top_xmin, top_ymin, top_xmax, top_ymax = ssd_net.detect(image)
+
+        total_time = total_time + time.time() - start
+
         print(img_path)
 
         for i in xrange(top_conf.shape[0]):
@@ -77,12 +87,13 @@ def output(model_def, model_weights, datatset_name):
         csvwriter = csv.writer(csvfile, delimiter=',')
         for box in output_boxes:
             csvwriter.writerow(box)
+    return total_time/len(os.listdir(img_dir))
 
 
 
 model_def = '../model/deploy.prototxt'
 model_weights = '../model/snapshot/VGG_HAND_SSD_300x300_iter_1000.caffemodel'
-output(model_def, model_weights, 'egohands')
+print(output(model_def, model_weights, 'egohands'))
 # output_gt_label('egohands')
 # output_gt_label('stanfordhands')
 # read_xmlfile('/Users/hzzone/Desktop/Hand-Keypoint-Detection/data/stanfordhands/test/Annotations/VOC2007_1.xml')
