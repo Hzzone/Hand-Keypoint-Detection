@@ -1602,9 +1602,6 @@ layer {
   bottom: "mbox_conf_flatten"
   bottom: "mbox_priorbox"
   top: "detection_out"
-  include {
-    phase: TEST
-  }
   detection_output_param {
     num_classes: 21
     share_location: true
@@ -1612,14 +1609,6 @@ layer {
     nms_param {
       nms_threshold: 0.449999988079
       top_k: 400
-    }
-    save_output_param {
-      output_directory: "/home/ubuntu/data/VOCdevkit/results/VOC2007/SSD_300x300/Main"
-      output_name_prefix: "comp4_det_test_"
-      output_format: "VOC"
-      label_map_file: "data/VOC0712/labelmap_voc.prototxt"
-      name_size_file: "data/VOC0712/test_name_size.txt"
-      num_test_image: 4952
     }
     code_type: CENTER_SIZE
     keep_top_k: 200

@@ -1715,7 +1715,7 @@ layer {
     loc_loss_type: SMOOTH_L1
     conf_loss_type: SOFTMAX
     loc_weight: 1.0
-    num_classes: 21
+    num_classes: 2
     share_location: true
     match_type: PER_PREDICTION
     overlap_threshold: 0.5
