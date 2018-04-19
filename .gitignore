@@ -1,5 +1,6 @@
 .idea
 *.pyc
+*.csv
 /p-net/train.txt
 *.caffemodel
 *.solverstate

@@ -14,11 +14,12 @@ model_weights = '/Users/hzzone/Desktop/Hand-Keypoint-Detection/model/snapshot/VG
 
 ssd_net = SSD_NET(model_weights, model_def)
 
+# image = caffe.io.load_image('/Users/hzzone/Desktop/CARDS_COURTYARD_B_T_0324.jpg')
 image = caffe.io.load_image('/Users/hzzone/Desktop/1.jpg')
 
 top_label_indices, top_conf, top_xmin, top_ymin, top_xmax, top_ymax = ssd_net.detect(image)
 
-print(top_label_indices, top_conf, top_xmin, top_ymin, top_xmax, top_ymax)
+# print(top_label_indices, top_conf, top_xmin, top_ymin, top_xmax, top_ymax)
 
 colors = plt.cm.hsv(np.linspace(0, 1, 21)).tolist()
 
@@ -34,7 +35,7 @@ for i in xrange(top_conf.shape[0]):
     label = int(top_label_indices[i])
     # label_name = top_labels[i]
     label_name = label
-    display_txt = '%s: %.2f'%(label_name, score)
+    display_txt = '%s: %.2f' % (label_name, score)
     coords = (xmin, ymin), xmax-xmin+1, ymax-ymin+1
     color = colors[label]
     currentAxis.add_patch(plt.Rectangle(*coords, fill=False, edgecolor=color, linewidth=2))

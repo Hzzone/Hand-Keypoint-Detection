@@ -217,7 +217,7 @@ snapshot_prefix = "snapshot/VGG_HAND_SSD_300x300_iter_"
 label_map_file = "../data/labelmap_voc.prototxt"
 
 # MultiBoxLoss parameters.
-num_classes = 2
+num_classes = 21
 share_location = True
 background_label_id=0
 train_on_diff_gt = True
@@ -325,11 +325,20 @@ VGGNetBody(net, from_layer='data', fully_conv=True, reduced=True, dilated=True,
 
 AddExtraLayers(net, use_batchnorm, lr_mult=lr_mult)
 
+## New
+# mbox_layers = CreateMultiBoxHead(net, data_layer='data', from_layers=mbox_source_layers,
+#         use_batchnorm=use_batchnorm, min_sizes=min_sizes, max_sizes=max_sizes,
+#         aspect_ratios=aspect_ratios, steps=steps, normalizations=normalizations,
+#         num_classes=num_classes, share_location=share_location, flip=flip, clip=clip,
+#         prior_variance=prior_variance, kernel_size=3, pad=1, lr_mult=lr_mult, conf_postfix='hand_detection')
+
+
+### initial
 mbox_layers = CreateMultiBoxHead(net, data_layer='data', from_layers=mbox_source_layers,
         use_batchnorm=use_batchnorm, min_sizes=min_sizes, max_sizes=max_sizes,
         aspect_ratios=aspect_ratios, steps=steps, normalizations=normalizations,
         num_classes=num_classes, share_location=share_location, flip=flip, clip=clip,
-        prior_variance=prior_variance, kernel_size=3, pad=1, lr_mult=lr_mult, conf_postfix='hand_detection')
+        prior_variance=prior_variance, kernel_size=3, pad=1, lr_mult=lr_mult)
 
 # Create the MultiBoxLossLayer.
 name = "mbox_loss"
@@ -344,12 +353,48 @@ with open(train_net_file, 'w') as f:
 
 # Create deploy net.
 # Remove the first and last layer from test net.
+#########
+
+
+# parameters for generating detection output.
+det_out_param = {
+    'num_classes': num_classes,
+    'share_location': share_location,
+    'background_label_id': background_label_id,
+    'nms_param': {'nms_threshold': 0.45, 'top_k': 400},
+    'keep_top_k': 200,
+    'confidence_threshold': 0.01,
+    'code_type': code_type,
+    }
+
+
+conf_name = "mbox_conf"
+if multibox_loss_param["conf_loss_type"] == P.MultiBoxLoss.SOFTMAX:
+  reshape_name = "{}_reshape".format(conf_name)
+  net[reshape_name] = L.Reshape(net[conf_name], shape=dict(dim=[0, -1, num_classes]))
+  softmax_name = "{}_softmax".format(conf_name)
+  net[softmax_name] = L.Softmax(net[reshape_name], axis=2)
+  flatten_name = "{}_flatten".format(conf_name)
+  net[flatten_name] = L.Flatten(net[softmax_name], axis=1)
+  mbox_layers[1] = net[flatten_name]
+elif multibox_loss_param["conf_loss_type"] == P.MultiBoxLoss.LOGISTIC:
+  sigmoid_name = "{}_sigmoid".format(conf_name)
+  net[sigmoid_name] = L.Sigmoid(net[conf_name])
+  mbox_layers[1] = net[sigmoid_name]
+
+net.detection_out = L.DetectionOutput(*mbox_layers,
+    detection_output_param=det_out_param,
+    include=dict(phase=caffe_pb2.Phase.Value('TEST')))
+
+
+
 deploy_net = net
 with open(deploy_net_file, 'w') as f:
     net_param = deploy_net.to_proto()
     # Remove the first (AnnotatedData) and last (DetectionEvaluate) layer from test net.
     del net_param.layer[0]
-    del net_param.layer[-1]
+    del net_param.layer[-5]
+    del net_param.layer[-1].bottom[-1]
     net_param.name = '{}_deploy'.format(model_name)
     net_param.input.extend(['data'])
     net_param.input_shape.extend([
