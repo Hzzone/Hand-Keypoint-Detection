@@ -217,7 +217,7 @@ snapshot_prefix = "snapshot/VGG_HAND_SSD_300x300_iter_"
 label_map_file = "../data/labelmap_voc.prototxt"
 
 # MultiBoxLoss parameters.
-num_classes = 21
+num_classes = 2
 share_location = True
 background_label_id=0
 train_on_diff_gt = True
@@ -285,7 +285,7 @@ clip = False
 # Divide the mini-batch to different GPUs.
 batch_size = 2
 num_gpus = 1
-iter_size = 20000
+iter_size = 200000
 device_id = 0
 batch_size_per_device = batch_size
 
@@ -325,20 +325,20 @@ VGGNetBody(net, from_layer='data', fully_conv=True, reduced=True, dilated=True,
 
 AddExtraLayers(net, use_batchnorm, lr_mult=lr_mult)
 
-## New
-# mbox_layers = CreateMultiBoxHead(net, data_layer='data', from_layers=mbox_source_layers,
-#         use_batchnorm=use_batchnorm, min_sizes=min_sizes, max_sizes=max_sizes,
-#         aspect_ratios=aspect_ratios, steps=steps, normalizations=normalizations,
-#         num_classes=num_classes, share_location=share_location, flip=flip, clip=clip,
-#         prior_variance=prior_variance, kernel_size=3, pad=1, lr_mult=lr_mult, conf_postfix='hand_detection')
-
-
-### initial
+# New
 mbox_layers = CreateMultiBoxHead(net, data_layer='data', from_layers=mbox_source_layers,
         use_batchnorm=use_batchnorm, min_sizes=min_sizes, max_sizes=max_sizes,
         aspect_ratios=aspect_ratios, steps=steps, normalizations=normalizations,
         num_classes=num_classes, share_location=share_location, flip=flip, clip=clip,
-        prior_variance=prior_variance, kernel_size=3, pad=1, lr_mult=lr_mult)
+        prior_variance=prior_variance, kernel_size=3, pad=1, lr_mult=lr_mult, conf_postfix='_hand_detection')
+
+
+# ### initial
+# mbox_layers = CreateMultiBoxHead(net, data_layer='data', from_layers=mbox_source_layers,
+#         use_batchnorm=use_batchnorm, min_sizes=min_sizes, max_sizes=max_sizes,
+#         aspect_ratios=aspect_ratios, steps=steps, normalizations=normalizations,
+#         num_classes=num_classes, share_location=share_location, flip=flip, clip=clip,
+#         prior_variance=prior_variance, kernel_size=3, pad=1, lr_mult=lr_mult)
 
 # Create the MultiBoxLossLayer.
 name = "mbox_loss"

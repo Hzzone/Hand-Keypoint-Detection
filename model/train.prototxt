@@ -1001,10 +1001,10 @@ layer {
   }
 }
 layer {
-  name: "conv4_3_norm_mbox_conf"
+  name: "conv4_3_norm_mbox_conf_hand_detection"
   type: "Convolution"
   bottom: "conv4_3_norm"
-  top: "conv4_3_norm_mbox_conf"
+  top: "conv4_3_norm_mbox_conf_hand_detection"
   param {
     lr_mult: 1.0
     decay_mult: 1.0
@@ -1014,7 +1014,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 84
+    num_output: 8
     pad: 1
     kernel_size: 3
     stride: 1
@@ -1028,10 +1028,10 @@ layer {
   }
 }
 layer {
-  name: "conv4_3_norm_mbox_conf_perm"
+  name: "conv4_3_norm_mbox_conf_hand_detection_perm"
   type: "Permute"
-  bottom: "conv4_3_norm_mbox_conf"
-  top: "conv4_3_norm_mbox_conf_perm"
+  bottom: "conv4_3_norm_mbox_conf_hand_detection"
+  top: "conv4_3_norm_mbox_conf_hand_detection_perm"
   permute_param {
     order: 0
     order: 2
@@ -1040,10 +1040,10 @@ layer {
   }
 }
 layer {
-  name: "conv4_3_norm_mbox_conf_flat"
+  name: "conv4_3_norm_mbox_conf_hand_detection_flat"
   type: "Flatten"
-  bottom: "conv4_3_norm_mbox_conf_perm"
-  top: "conv4_3_norm_mbox_conf_flat"
+  bottom: "conv4_3_norm_mbox_conf_hand_detection_perm"
+  top: "conv4_3_norm_mbox_conf_hand_detection_flat"
   flatten_param {
     axis: 1
   }
@@ -1117,10 +1117,10 @@ layer {
   }
 }
 layer {
-  name: "fc7_mbox_conf"
+  name: "fc7_mbox_conf_hand_detection"
   type: "Convolution"
   bottom: "fc7"
-  top: "fc7_mbox_conf"
+  top: "fc7_mbox_conf_hand_detection"
   param {
     lr_mult: 1.0
     decay_mult: 1.0
@@ -1130,7 +1130,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 126
+    num_output: 12
     pad: 1
     kernel_size: 3
     stride: 1
@@ -1144,10 +1144,10 @@ layer {
   }
 }
 layer {
-  name: "fc7_mbox_conf_perm"
+  name: "fc7_mbox_conf_hand_detection_perm"
   type: "Permute"
-  bottom: "fc7_mbox_conf"
-  top: "fc7_mbox_conf_perm"
+  bottom: "fc7_mbox_conf_hand_detection"
+  top: "fc7_mbox_conf_hand_detection_perm"
   permute_param {
     order: 0
     order: 2
@@ -1156,10 +1156,10 @@ layer {
   }
 }
 layer {
-  name: "fc7_mbox_conf_flat"
+  name: "fc7_mbox_conf_hand_detection_flat"
   type: "Flatten"
-  bottom: "fc7_mbox_conf_perm"
-  top: "fc7_mbox_conf_flat"
+  bottom: "fc7_mbox_conf_hand_detection_perm"
+  top: "fc7_mbox_conf_hand_detection_flat"
   flatten_param {
     axis: 1
   }
@@ -1234,10 +1234,10 @@ layer {
   }
 }
 layer {
-  name: "conv6_2_mbox_conf"
+  name: "conv6_2_mbox_conf_hand_detection"
   type: "Convolution"
   bottom: "conv6_2"
-  top: "conv6_2_mbox_conf"
+  top: "conv6_2_mbox_conf_hand_detection"
   param {
     lr_mult: 1.0
     decay_mult: 1.0
@@ -1247,7 +1247,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 126
+    num_output: 12
     pad: 1
     kernel_size: 3
     stride: 1
@@ -1261,10 +1261,10 @@ layer {
   }
 }
 layer {
-  name: "conv6_2_mbox_conf_perm"
+  name: "conv6_2_mbox_conf_hand_detection_perm"
   type: "Permute"
-  bottom: "conv6_2_mbox_conf"
-  top: "conv6_2_mbox_conf_perm"
+  bottom: "conv6_2_mbox_conf_hand_detection"
+  top: "conv6_2_mbox_conf_hand_detection_perm"
   permute_param {
     order: 0
     order: 2
@@ -1273,10 +1273,10 @@ layer {
   }
 }
 layer {
-  name: "conv6_2_mbox_conf_flat"
+  name: "conv6_2_mbox_conf_hand_detection_flat"
   type: "Flatten"
-  bottom: "conv6_2_mbox_conf_perm"
-  top: "conv6_2_mbox_conf_flat"
+  bottom: "conv6_2_mbox_conf_hand_detection_perm"
+  top: "conv6_2_mbox_conf_hand_detection_flat"
   flatten_param {
     axis: 1
   }
@@ -1351,10 +1351,10 @@ layer {
   }
 }
 layer {
-  name: "conv7_2_mbox_conf"
+  name: "conv7_2_mbox_conf_hand_detection"
   type: "Convolution"
   bottom: "conv7_2"
-  top: "conv7_2_mbox_conf"
+  top: "conv7_2_mbox_conf_hand_detection"
   param {
     lr_mult: 1.0
     decay_mult: 1.0
@@ -1364,7 +1364,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 126
+    num_output: 12
     pad: 1
     kernel_size: 3
     stride: 1
@@ -1378,10 +1378,10 @@ layer {
   }
 }
 layer {
-  name: "conv7_2_mbox_conf_perm"
+  name: "conv7_2_mbox_conf_hand_detection_perm"
   type: "Permute"
-  bottom: "conv7_2_mbox_conf"
-  top: "conv7_2_mbox_conf_perm"
+  bottom: "conv7_2_mbox_conf_hand_detection"
+  top: "conv7_2_mbox_conf_hand_detection_perm"
   permute_param {
     order: 0
     order: 2
@@ -1390,10 +1390,10 @@ layer {
   }
 }
 layer {
-  name: "conv7_2_mbox_conf_flat"
+  name: "conv7_2_mbox_conf_hand_detection_flat"
   type: "Flatten"
-  bottom: "conv7_2_mbox_conf_perm"
-  top: "conv7_2_mbox_conf_flat"
+  bottom: "conv7_2_mbox_conf_hand_detection_perm"
+  top: "conv7_2_mbox_conf_hand_detection_flat"
   flatten_param {
     axis: 1
   }
@@ -1468,10 +1468,10 @@ layer {
   }
 }
 layer {
-  name: "conv8_2_mbox_conf"
+  name: "conv8_2_mbox_conf_hand_detection"
   type: "Convolution"
   bottom: "conv8_2"
-  top: "conv8_2_mbox_conf"
+  top: "conv8_2_mbox_conf_hand_detection"
   param {
     lr_mult: 1.0
     decay_mult: 1.0
@@ -1481,7 +1481,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 84
+    num_output: 8
     pad: 1
     kernel_size: 3
     stride: 1
@@ -1495,10 +1495,10 @@ layer {
   }
 }
 layer {
-  name: "conv8_2_mbox_conf_perm"
+  name: "conv8_2_mbox_conf_hand_detection_perm"
   type: "Permute"
-  bottom: "conv8_2_mbox_conf"
-  top: "conv8_2_mbox_conf_perm"
+  bottom: "conv8_2_mbox_conf_hand_detection"
+  top: "conv8_2_mbox_conf_hand_detection_perm"
   permute_param {
     order: 0
     order: 2
@@ -1507,10 +1507,10 @@ layer {
   }
 }
 layer {
-  name: "conv8_2_mbox_conf_flat"
+  name: "conv8_2_mbox_conf_hand_detection_flat"
   type: "Flatten"
-  bottom: "conv8_2_mbox_conf_perm"
-  top: "conv8_2_mbox_conf_flat"
+  bottom: "conv8_2_mbox_conf_hand_detection_perm"
+  top: "conv8_2_mbox_conf_hand_detection_flat"
   flatten_param {
     axis: 1
   }
@@ -1584,10 +1584,10 @@ layer {
   }
 }
 layer {
-  name: "conv9_2_mbox_conf"
+  name: "conv9_2_mbox_conf_hand_detection"
   type: "Convolution"
   bottom: "conv9_2"
-  top: "conv9_2_mbox_conf"
+  top: "conv9_2_mbox_conf_hand_detection"
   param {
     lr_mult: 1.0
     decay_mult: 1.0
@@ -1597,7 +1597,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 84
+    num_output: 8
     pad: 1
     kernel_size: 3
     stride: 1
@@ -1611,10 +1611,10 @@ layer {
   }
 }
 layer {
-  name: "conv9_2_mbox_conf_perm"
+  name: "conv9_2_mbox_conf_hand_detection_perm"
   type: "Permute"
-  bottom: "conv9_2_mbox_conf"
-  top: "conv9_2_mbox_conf_perm"
+  bottom: "conv9_2_mbox_conf_hand_detection"
+  top: "conv9_2_mbox_conf_hand_detection_perm"
   permute_param {
     order: 0
     order: 2
@@ -1623,10 +1623,10 @@ layer {
   }
 }
 layer {
-  name: "conv9_2_mbox_conf_flat"
+  name: "conv9_2_mbox_conf_hand_detection_flat"
   type: "Flatten"
-  bottom: "conv9_2_mbox_conf_perm"
-  top: "conv9_2_mbox_conf_flat"
+  bottom: "conv9_2_mbox_conf_hand_detection_perm"
+  top: "conv9_2_mbox_conf_hand_detection_flat"
   flatten_param {
     axis: 1
   }
@@ -1668,12 +1668,12 @@ layer {
 layer {
   name: "mbox_conf"
   type: "Concat"
-  bottom: "conv4_3_norm_mbox_conf_flat"
-  bottom: "fc7_mbox_conf_flat"
-  bottom: "conv6_2_mbox_conf_flat"
-  bottom: "conv7_2_mbox_conf_flat"
-  bottom: "conv8_2_mbox_conf_flat"
-  bottom: "conv9_2_mbox_conf_flat"
+  bottom: "conv4_3_norm_mbox_conf_hand_detection_flat"
+  bottom: "fc7_mbox_conf_hand_detection_flat"
+  bottom: "conv6_2_mbox_conf_hand_detection_flat"
+  bottom: "conv7_2_mbox_conf_hand_detection_flat"
+  bottom: "conv8_2_mbox_conf_hand_detection_flat"
+  bottom: "conv9_2_mbox_conf_hand_detection_flat"
   top: "mbox_conf"
   concat_param {
     axis: 1
@@ -1715,7 +1715,7 @@ layer {
     loc_loss_type: SMOOTH_L1
     conf_loss_type: SOFTMAX
     loc_weight: 1.0
-    num_classes: 21
+    num_classes: 2
     share_location: true
     match_type: PER_PREDICTION
     overlap_threshold: 0.5

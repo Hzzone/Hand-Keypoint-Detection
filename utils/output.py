@@ -92,8 +92,8 @@ def output(model_def, model_weights, datatset_name):
 
 
 model_def = '../model/deploy.prototxt'
-model_weights = '../model/snapshot/VGG_HAND_SSD_300x300_iter_1000.caffemodel'
-print(output(model_def, model_weights, 'egohands'))
+model_weights = '../model/snapshot/VGG_HAND_SSD_300x300_iter__iter_80000.caffemodel'
+print(output(model_def, model_weights, 'stanfordhands'))
 # output_gt_label('egohands')
 # output_gt_label('stanfordhands')
 # read_xmlfile('/Users/hzzone/Desktop/Hand-Keypoint-Detection/data/stanfordhands/test/Annotations/VOC2007_1.xml')

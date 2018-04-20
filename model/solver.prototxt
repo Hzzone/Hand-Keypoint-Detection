@@ -1,7 +1,7 @@
 train_net: "train.prototxt"
-base_lr: 9.99999974738e-05
-display: 10
-max_iter: 120000
+base_lr: 0.0001
+display: 20
+max_iter: 200000
 lr_policy: "multistep"
 gamma: 0.10000000149
 momentum: 0.899999976158
@@ -13,9 +13,8 @@ device_id: 0
 debug_info: false
 snapshot_after_train: true
 average_loss: 10
-stepvalue: 80000
+stepvalue: 60000
 stepvalue: 100000
-stepvalue: 120000
-iter_size: 20000
+stepvalue: 140000
 type: "SGD"
 
