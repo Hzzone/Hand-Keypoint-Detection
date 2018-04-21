@@ -7,23 +7,28 @@ import caffe
 from utils.ssd_net import *
 import time
 
-cap = cv2.VideoCapture(0)
-# width = 720
-# height = 480
-width = 480
-height = 360
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+## Use local camera
+# cap = cv2.VideoCapture(0)
+# # width = 720
+# # height = 480
+width = 640
+height = 480
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+# cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
-model_def = '/Users/hzzone/Desktop/Hand-Keypoint-Detection/model/deploy.prototxt'
-model_weights = '/Users/hzzone/Desktop/Hand-Keypoint-Detection/model/snapshot/VGG_HAND_SSD_300x300_iter__iter_80000.caffemodel'
+## Use ipcam
+url = r"http://192.168.1.190:8080/videofeed"
+capture = cv2.VideoCapture(url)
+
+model_def = '../model/deploy.prototxt'
+model_weights = '../model/snapshot/VGG_HAND_SSD_300x300_iter__iter_80000.caffemodel'
 
 ssd_net = SSD_NET(model_weights, model_def)
 
 while True:
     # get a frame
     start_time = time.time()
-    ret, frame = cap.read()
+    ret, frame = capture.read()
     # show a frame
     try:
         image_np = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -53,5 +58,5 @@ while True:
     if cv2.waitKey(1) == 27:
         break  # esc to quit
 
-cap.release()
+capture.release()
 cv2.destroyAllWindows()
