@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import re
 
-with open('/home/hzzone/train.log') as f:
+with open('../model/train.log') as f:
     data = f.read()
 
 pattern = re.compile(r'''

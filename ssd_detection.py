@@ -10,12 +10,12 @@ plt.rcParams['image.interpolation'] = 'nearest'
 plt.rcParams['image.cmap'] = 'gray'
 
 model_def = '/Users/hzzone/Desktop/Hand-Keypoint-Detection/model/deploy.prototxt'
-model_weights = '/Users/hzzone/Desktop/Hand-Keypoint-Detection/model/snapshot/VGG_HAND_SSD_300x300_iter_1000.caffemodel'
+model_weights = '/Users/hzzone/Desktop/Hand-Keypoint-Detection/model/snapshot/VGG_HAND_SSD_300x300_iter__iter_80000.caffemodel'
 
 ssd_net = SSD_NET(model_weights, model_def)
 
 # image = caffe.io.load_image('/Users/hzzone/Desktop/CARDS_COURTYARD_B_T_0324.jpg')
-image = caffe.io.load_image('/Users/hzzone/Desktop/1.jpg')
+image = caffe.io.load_image('/Users/hzzone/Desktop/3.jpg')
 
 top_label_indices, top_conf, top_xmin, top_ymin, top_xmax, top_ymax = ssd_net.detect(image)
 
