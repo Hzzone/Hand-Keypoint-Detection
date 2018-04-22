@@ -9,13 +9,13 @@ plt.rcParams['figure.figsize'] = (10, 10)
 plt.rcParams['image.interpolation'] = 'nearest'
 plt.rcParams['image.cmap'] = 'gray'
 
-model_def = '/Users/hzzone/Desktop/Hand-Keypoint-Detection/model/deploy.prototxt'
-model_weights = '/Users/hzzone/Desktop/Hand-Keypoint-Detection/model/snapshot/VGG_HAND_SSD_300x300_iter__iter_80000.caffemodel'
+model_def = 'model/deploy.prototxt'
+model_weights = 'model/snapshot/VGG_HAND_SSD_300x300_iter_50000.caffemodel'
 
-ssd_net = SSD_NET(model_weights, model_def)
+ssd_net = SSD_NET(model_weights, model_def, GPU_MODE=True, threshold=0.5)
 
 # image = caffe.io.load_image('/Users/hzzone/Desktop/CARDS_COURTYARD_B_T_0324.jpg')
-image = caffe.io.load_image('/Users/hzzone/Desktop/3.jpg')
+image = caffe.io.load_image('/home/hzzone/Desktop/2.jpg')
 
 top_label_indices, top_conf, top_xmin, top_ymin, top_xmax, top_ymax = ssd_net.detect(image)
 
@@ -35,7 +35,7 @@ for i in xrange(top_conf.shape[0]):
     label = int(top_label_indices[i])
     # label_name = top_labels[i]
     label_name = label
-    display_txt = '%s: %.2f' % (label_name, score)
+    display_txt = '%s: %.2f' % ('hand', score)
     coords = (xmin, ymin), xmax-xmin+1, ymax-ymin+1
     color = colors[label]
     currentAxis.add_patch(plt.Rectangle(*coords, fill=False, edgecolor=color, linewidth=2))

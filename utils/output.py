@@ -43,7 +43,7 @@ def output_gt_label(datatset_name):
 def output(model_def, model_weights, datatset_name):
 
     img_dir = os.path.join(data_dir, datatset_name, 'test', 'JPEGImages')
-    ssd_net = SSD_NET(model_weights, model_def, GPU_MODE=True)
+    ssd_net = SSD_NET(model_weights, model_def, GPU_MODE=True, threshold=0.2)
 
     output_boxes = [['id', 'x1', 'y1', 'x2', 'y2', 'score'], ]
 
@@ -92,15 +92,18 @@ def output(model_def, model_weights, datatset_name):
 
 
 model_def = '../model/deploy.prototxt'
-# model_weights = '../model/snapshot/VGG_HAND_SSD_300x300_iter__iter_80000.caffemodel'
-model_path = '../model/snapshot'
-total_time = []
-for model_weights in os.listdir(model_path):
-    if model_weights.endswith('.caffemodel'):
-        total_time.append(output(model_def, os.path.join(model_path, model_weights), 'stanfordhands'))
-        total_time.append(output(model_def, os.path.join(model_path, model_weights), 'egohands'))
+model_weights = '../model/snapshot/VGG_HAND_SSD_300x300_iter_50000.caffemodel'
+# model_path = '../model/snapshot'
+# total_time = []
+# for model_weights in os.listdir(model_path):
+#     if model_weights.endswith('.caffemodel'):
+#         total_time.append(output(model_def, os.path.join(model_path, model_weights), 'stanfordhands'))
+#         total_time.append(output(model_def, os.path.join(model_path, model_weights), 'egohands'))
 
-print(total_time)
+print(output(model_def, model_weights, 'stanfordhands'))
+print(output(model_def, model_weights, 'egohands'))
+
+# print(total_time)
 # output_gt_label('egohands')
 # output_gt_label('stanfordhands')
 # read_xmlfile('/Users/hzzone/Desktop/Hand-Keypoint-Detection/data/stanfordhands/test/Annotations/VOC2007_1.xml')

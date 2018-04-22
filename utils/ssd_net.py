@@ -24,7 +24,7 @@ def get_labelname(labelmap, labels):
 
 class SSD_NET(object):
 
-    def __init__(self, model_weights, model_def, GPU_MODE=False):
+    def __init__(self, model_weights, model_def, threshold=0.5, GPU_MODE=False):
         if GPU_MODE:
             caffe.set_device(0)
             caffe.set_mode_gpu()
@@ -33,6 +33,7 @@ class SSD_NET(object):
         self.net = caffe.Net(model_def,  # defines the structure of the model
                         model_weights,  # contains the trained weights
                         caffe.TEST)  # use test mode (e.g., don't perform dropout)
+        self.threshold = threshold
         self.transformer = caffe.io.Transformer({'data': self.net.blobs['data'].data.shape})
         self.transformer.set_transpose('data', (2, 0, 1))
         self.transformer.set_mean('data', np.array([127.0, 127.0, 127.0]))  # mean pixel
@@ -56,7 +57,7 @@ class SSD_NET(object):
         det_ymax = detections[0, 0, :, 6]
         # Get detections with confidence higher than 0.6.
         # print(det_conf)
-        top_indices = [i for i, conf in enumerate(det_conf) if conf >= 0.5]
+        top_indices = [i for i, conf in enumerate(det_conf) if conf >= self.threshold]
 
         top_conf = det_conf[top_indices]
         top_label_indices = det_label[top_indices].tolist()

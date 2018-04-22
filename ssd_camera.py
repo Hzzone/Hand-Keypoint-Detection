@@ -27,9 +27,9 @@ url = 'http://192.168.1.190:8080/shot.jpg'
 
 
 model_def = 'model/deploy.prototxt'
-model_weights = 'model/snapshot/VGG_HAND_SSD_300x300_iter_30000.caffemodel'
+model_weights = 'model/snapshot/VGG_HAND_SSD_300x300_iter_50000.caffemodel'
 
-ssd_net = SSD_NET(model_weights, model_def, GPU_MODE=True)
+ssd_net = SSD_NET(model_weights, model_def, GPU_MODE=True, threshold=0.7)
 
 while True:
     # get a frame
@@ -63,7 +63,7 @@ while True:
         ymin = int(round(top_ymin[i] * height))
         xmax = int(round(top_xmax[i] * width))
         ymax = int(round(top_ymax[i] * height))
-        print(xmin, ymin, xmax, ymax)
+        print(xmin, ymin, xmax, ymax, top_conf[i])
         # if np.sum(top_xmin[i]<0) > 0 or np.sum(top_xmax[i]<0) > 0 or np.sum(top_ymin[i]<0) > 0 or np.sum(top_ymax[i]<0) > 0:
         #     continue
         cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
