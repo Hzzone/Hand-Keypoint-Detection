@@ -6,6 +6,8 @@ sys.path.insert(0, 'caffe/python')
 import caffe
 from utils.ssd_net import *
 import time
+import urllib
+
 
 ## Use local camera
 # cap = cv2.VideoCapture(0)
@@ -17,18 +19,34 @@ height = 480
 # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
 ## Use ipcam
-url = r"http://192.168.1.190:8080/videofeed"
-capture = cv2.VideoCapture(url)
+# url = r"http://192.168.1.190:8080/videofeed"
+# capture = cv2.VideoCapture(url)
 
-model_def = '../model/deploy.prototxt'
-model_weights = '../model/snapshot/VGG_HAND_SSD_300x300_iter__iter_80000.caffemodel'
+# Replace the URL with your own IPwebcam shot.jpg IP:port
+url = 'http://192.168.1.190:8080/shot.jpg'
 
-ssd_net = SSD_NET(model_weights, model_def)
+
+model_def = 'model/deploy.prototxt'
+model_weights = 'model/snapshot/VGG_HAND_SSD_300x300_iter__iter_80000.caffemodel'
+
+ssd_net = SSD_NET(model_weights, model_def, GPU_MODE=True)
 
 while True:
     # get a frame
+    # start_time = time.time()
+    # ret, frame = capture.read()
+
+    # Use urllib to get the image from the IP camera
+    imgResp = urllib.urlopen(url)
+    
+    # Numpy to convert into a array
+    imgNp = np.array(bytearray(imgResp.read()),dtype=np.uint8)
+    
+    # Finally decode the array to OpenCV usable format ;) 
+    frame = cv2.imdecode(imgNp,-1)
+
     start_time = time.time()
-    ret, frame = capture.read()
+
     # show a frame
     try:
         image_np = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -58,5 +76,5 @@ while True:
     if cv2.waitKey(1) == 27:
         break  # esc to quit
 
-capture.release()
+# capture.release()
 cv2.destroyAllWindows()
