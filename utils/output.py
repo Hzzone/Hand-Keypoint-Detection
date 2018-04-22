@@ -92,8 +92,15 @@ def output(model_def, model_weights, datatset_name):
 
 
 model_def = '../model/deploy.prototxt'
-model_weights = '../model/snapshot/VGG_HAND_SSD_300x300_iter__iter_80000.caffemodel'
-print(output(model_def, model_weights, 'stanfordhands'))
+# model_weights = '../model/snapshot/VGG_HAND_SSD_300x300_iter__iter_80000.caffemodel'
+model_path = '../model'
+total_time = []
+for model_weights in os.listdir(model_path):
+    if model_weights.endswith('.caffemodel'):
+        total_time.append(output(model_def, model_weights, 'stanfordhands'))
+        total_time.append(output(model_def, model_weights, 'egohands'))
+
+print(total_time)
 # output_gt_label('egohands')
 # output_gt_label('stanfordhands')
 # read_xmlfile('/Users/hzzone/Desktop/Hand-Keypoint-Detection/data/stanfordhands/test/Annotations/VOC2007_1.xml')
