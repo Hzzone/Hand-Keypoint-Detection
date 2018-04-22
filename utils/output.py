@@ -93,12 +93,12 @@ def output(model_def, model_weights, datatset_name):
 
 model_def = '../model/deploy.prototxt'
 # model_weights = '../model/snapshot/VGG_HAND_SSD_300x300_iter__iter_80000.caffemodel'
-model_path = '../model'
+model_path = '../model/snapshot'
 total_time = []
 for model_weights in os.listdir(model_path):
     if model_weights.endswith('.caffemodel'):
-        total_time.append(output(model_def, model_weights, 'stanfordhands'))
-        total_time.append(output(model_def, model_weights, 'egohands'))
+        total_time.append(output(model_def, os.path.join(model_path, model_weights), 'stanfordhands'))
+        total_time.append(output(model_def, os.path.join(model_path, model_weights), 'egohands'))
 
 print(total_time)
 # output_gt_label('egohands')

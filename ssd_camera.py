@@ -27,7 +27,7 @@ url = 'http://192.168.1.190:8080/shot.jpg'
 
 
 model_def = 'model/deploy.prototxt'
-model_weights = 'model/snapshot/VGG_HAND_SSD_300x300_iter__iter_80000.caffemodel'
+model_weights = 'model/snapshot/VGG_HAND_SSD_300x300_iter_30000.caffemodel'
 
 ssd_net = SSD_NET(model_weights, model_def, GPU_MODE=True)
 
